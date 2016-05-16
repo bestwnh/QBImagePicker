@@ -838,10 +838,8 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         if (imagePickerController.showsNumberOfSelectedAssets) {
             [self updateSelectionInfo];
             
-            if (selectedAssets.count == 1) {
-                // Show toolbar
-                [self.navigationController setToolbarHidden:NO animated:YES];
-            }
+            // Show toolbar
+            [self.navigationController setToolbarHidden:selectedAssets.count == 0 animated:YES];
         }
     } else {
         if ([imagePickerController.delegate respondsToSelector:@selector(qb_imagePickerController:didFinishPickingAssets:)]) {
@@ -875,10 +873,9 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     if (imagePickerController.showsNumberOfSelectedAssets) {
         [self updateSelectionInfo];
         
-        if (selectedAssets.count == 0) {
-            // Hide toolbar
-            [self.navigationController setToolbarHidden:YES animated:YES];
-        }
+        // Hide toolbar
+        [self.navigationController setToolbarHidden:selectedAssets.count == 0 animated:YES];
+
     }
     
     if ([imagePickerController.delegate respondsToSelector:@selector(qb_imagePickerController:didDeselectAsset:)]) {
