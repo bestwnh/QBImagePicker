@@ -703,6 +703,17 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         NSString *assetType = [asset valueForProperty:ALAssetPropertyType];
 
         isSelected = [self.imagePickerController.selectedAssets containsObject:asset];
+        // fetch image after library change
+        if (!isSelected) {
+            for (ALAsset *selectedAsset in self.imagePickerController.selectedAssets) {
+                if ([selectedAsset.description isEqualToString:asset.description]) {
+                    NSInteger index = [self.imagePickerController.selectedAssets indexOfObject:selectedAsset];
+                    [self.imagePickerController.selectedAssets replaceObjectAtIndex:index withObject:asset];
+                    isSelected = YES;
+                    break;
+                }
+            }
+        }
         isVideo = [assetType isEqualToString:ALAssetTypeVideo];
         duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
         
