@@ -45,6 +45,7 @@
         self.numberOfColumnsInLandscape = 7;
         
         _selectedAssets = [NSMutableOrderedSet orderedSet];
+        _selectedAssetThumbnails = [NSMutableOrderedSet orderedSet];
         
         // Get asset bundle
         self.assetBundle = [NSBundle bundleForClass:[self class]];

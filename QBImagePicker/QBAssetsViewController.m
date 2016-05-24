@@ -825,6 +825,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 {
     QBImagePickerController *imagePickerController = self.imagePickerController;
     NSMutableOrderedSet *selectedAssets = imagePickerController.selectedAssets;
+    NSMutableOrderedSet *selectedAssetThumbnails = imagePickerController.selectedAssetThumbnails;
     
     id asset = [self assetAtIndex: indexPath.item];
     
@@ -832,6 +833,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         if ([self isAutoDeselectEnabled] && selectedAssets.count > 0) {
             // Remove previous selected asset from set
             [selectedAssets removeObjectAtIndex:0];
+            [selectedAssetThumbnails removeObjectAtIndex:0];
             
             // Deselect previous selected asset
             if (self.lastSelectedItemIndexPath) {
@@ -841,6 +843,8 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         
         // Add asset to set
         [selectedAssets addObject:asset];
+        QBAssetCell *cell = (QBAssetCell*)[collectionView cellForItemAtIndexPath:indexPath];
+        [selectedAssetThumbnails addObject:cell.imageView.image];
         
         self.lastSelectedItemIndexPath = indexPath;
         
