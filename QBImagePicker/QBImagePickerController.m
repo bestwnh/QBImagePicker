@@ -45,7 +45,6 @@
         self.numberOfColumnsInLandscape = 7;
         
         _selectedAssets = [NSMutableOrderedSet orderedSet];
-        _selectedAssetThumbnails = [NSMutableOrderedSet orderedSet];
         
         // Get asset bundle
         self.assetBundle = [NSBundle bundleForClass:[self class]];
@@ -78,6 +77,30 @@
     [navigationController didMoveToParentViewController:self];
     
     self.albumsNavigationController = navigationController;
+}
+
+- (NSArray *)fetchSelectedAssetThumbnailsWithSize:(CGSize)size
+{
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    
+    if ([QBImagePickerController usingPhotosLibrary]) {
+        CGFloat scale = [[UIScreen mainScreen] scale];
+        for (PHAsset *asset in self.selectedAssets) {
+            [[PHCachingImageManager defaultManager] requestImageForAsset:asset
+                                                              targetSize:CGSizeMake(size.width * scale, size.height * scale)
+                                                             contentMode:PHImageContentModeAspectFit
+                                                                 options:nil
+                                                           resultHandler:^(UIImage *result, NSDictionary *info) {
+                                                               [array addObject:result];
+                                                           }];
+        }
+    } else {
+        for (ALAsset *asset in self.selectedAssets) {
+            [array addObject:[UIImage imageWithCGImage:asset.thumbnail]];
+        }
+    }
+    
+    return array;
 }
 
 @end
