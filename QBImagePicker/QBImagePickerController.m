@@ -18,6 +18,8 @@
 
 @property (nonatomic, strong) NSBundle *assetBundle;
 
+@property (nonatomic, strong, readonly) NSMutableOrderedSet *storedSelectedAssets;
+
 @end
 
 @implementation QBImagePickerController
@@ -45,6 +47,7 @@
         self.numberOfColumnsInLandscape = 7;
         
         _selectedAssets = [NSMutableOrderedSet orderedSet];
+        _storedSelectedAssets = [NSMutableOrderedSet orderedSet];
         
         // Get asset bundle
         self.assetBundle = [NSBundle bundleForClass:[self class]];
@@ -61,6 +64,20 @@
     }
     
     return self;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    [self.storedSelectedAssets removeAllObjects];
+    [self.storedSelectedAssets addObjectsFromArray:self.selectedAssets.array];
+}
+
+- (void)cancelSelectedAssetsChange
+{
+    [self.selectedAssets removeAllObjects];
+    [self.selectedAssets addObjectsFromArray:self.storedSelectedAssets.array];
 }
 
 - (void)setUpAlbumsViewController

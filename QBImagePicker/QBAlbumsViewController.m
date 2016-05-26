@@ -144,6 +144,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 
 - (IBAction)cancel:(id)sender
 {
+    [self.imagePickerController cancelSelectedAssetsChange];
     if ([self.imagePickerController.delegate respondsToSelector:@selector(qb_imagePickerControllerDidCancel:)]) {
         [self.imagePickerController.delegate qb_imagePickerControllerDidCancel:self.imagePickerController];
     }

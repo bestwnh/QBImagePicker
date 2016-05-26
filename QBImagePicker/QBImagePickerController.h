@@ -66,5 +66,6 @@ typedef NS_ENUM(NSUInteger, QBImagePickerCollectionSubtype) {
 @property (nonatomic, assign) NSUInteger numberOfColumnsInLandscape;
 
 - (void)fetchSelectedAssetThumbnailsWithSize:(CGSize)size completion:(void (^)(NSArray *thumbs))completion;
+- (void)cancelSelectedAssetsChange;
 
 @end
