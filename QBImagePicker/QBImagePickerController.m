@@ -79,9 +79,18 @@
     self.albumsNavigationController = navigationController;
 }
 
-- (NSArray *)fetchSelectedAssetThumbnailsWithSize:(CGSize)size
+- (void)fetchSelectedAssetThumbnailsWithSize:(CGSize)size completion:(void (^)(NSArray *))completion
 {
     NSMutableArray *array = [[NSMutableArray alloc] init];
+    NSMutableOrderedSet *selectedAssets = self.selectedAssets;
+    
+    void (^checkNumberOfAssets)(void) = ^{
+        if (array.count == selectedAssets.count) {
+            if (completion) {
+                completion([array copy]);
+            }
+        }
+    };
     
     if ([QBImagePickerController usingPhotosLibrary]) {
         CGFloat scale = [[UIScreen mainScreen] scale];
@@ -92,15 +101,18 @@
                                                                  options:nil
                                                            resultHandler:^(UIImage *result, NSDictionary *info) {
                                                                [array addObject:result];
+                                                               // Check if the loading finished
+                                                               checkNumberOfAssets();
+                                                               
                                                            }];
         }
     } else {
         for (ALAsset *asset in self.selectedAssets) {
             [array addObject:[UIImage imageWithCGImage:asset.thumbnail]];
         }
+        completion([array copy]);
     }
     
-    return array;
 }
 
 @end
